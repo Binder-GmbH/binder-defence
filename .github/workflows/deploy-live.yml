@@ -104,7 +104,7 @@ jobs:
       - name: Copy docker-compose and env files to server
         run: |
           ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "mkdir -p /var/www/binder-defence"
-          scp docker-compose.live.yml ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }}:/var/www/binder-defence/docker-compose.yml
+          scp docker-compose.live.yml ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }}:/var/www/binder-defence/docker-compose.live.yml
 
           # Copy .env.live if exists (don't overwrite existing .env)
           if [ -f .env.live ]; then
@@ -121,15 +121,15 @@ jobs:
 
             # Pull new image
             export GITHUB_REPOSITORY="${{ github.repository }}"
-            docker compose pull app
+            docker compose --env-file .env.live -f docker-compose.live.yml pull app
 
             # Restart container
-            docker compose up -d app
+            docker compose --env-file .env.live -f docker-compose.live.yml up -d app
 
             # Show logs
-            docker compose logs --tail=50 app
+            docker compose --env-file .env.live -f docker-compose.live.yml logs --tail=50 app
           EOF
 
       - name: Verify deployment
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "cd /var/www/binder-defence && docker compose ps"
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "cd /var/www/binder-defence && docker compose --env-file .env.live -f docker-compose.live.yml ps"
