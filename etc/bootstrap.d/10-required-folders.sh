@@ -11,9 +11,6 @@ set -e
 mkdir -p /app/source/var/cache \
   /app/source/var/log
 
-# Shared folder is available for additional persistent data
-mkdir -p /app/shared/uploads
-
 # install:fixfolderstructure does not exist in TYPO3 13
 # Folders are created by mkdir above
 
