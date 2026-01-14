@@ -1,0 +1,47 @@
+name: Deploy to Stage
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, json, pdo, pdo_mysql
+
+      - name: Install Composer dependencies
+        run: |
+          cd source
+          composer install --no-dev --optimize-autoloader --no-progress --no-interaction
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.STAGE_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Stage Server
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='source/var' \
+            --exclude='source/public/fileadmin' \
+            --exclude='source/public/typo3temp' \
+            --exclude='docker/mysql/data' \
+            ./ ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:${{ secrets.STAGE_PATH }}/
+
+      - name: Restart Docker containers
+        run: |
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd ${{ secrets.STAGE_PATH }} && docker-compose up -d"
