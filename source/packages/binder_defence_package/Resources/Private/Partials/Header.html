@@ -1,0 +1,19 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{page.title} - BINDER Defence</title>
+    <f:asset.css identifier="main" href="EXT:binder_defence_package/Resources/Public/Css/main.css" />
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">BINDER Defence</div>
+        <nav>
+            <f:for each="{mainNavigation}" as="item">
+                <a href="{item.link}" class="{f:if(condition: item.active, then: 'active')}">{item.title}</a>
+            </f:for>
+        </nav>
+    </div>
+</header>
+</html>

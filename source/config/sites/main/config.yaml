@@ -1,5 +1,7 @@
 base: /
 baseVariants: []
+dependencies:
+  - binder-gmbh/binder-defence-package
 languages:
   - languageId: 0
     title: English

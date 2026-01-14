@@ -1,0 +1,20 @@
+{
+    "name": "binder-gmbh/binder-defence-package",
+    "type": "typo3-cms-extension",
+    "description": "Site Package for BINDER Defence website",
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "binder_defence_package"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "BinderGmbh\\BinderDefencePackage\\": "Classes/"
+        }
+    },
+    "require": {
+        "typo3/cms-core": "^13.4",
+        "typo3/cms-fluid-styled-content": "^13.4",
+        "typo3/cms-rte-ckeditor": "^13.4"
+    }
+}

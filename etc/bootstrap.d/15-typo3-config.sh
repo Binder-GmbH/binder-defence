@@ -17,9 +17,9 @@ if [ -n "${TYPO3_ENCRYPTION_KEY:-}" ]; then
         echo 'Encryption key set' . PHP_EOL;
     }
 
-    // Configure trusted hosts pattern for all binder-defence/defense domains
-    // Match both root domains and subdomains (e.g., binder-defence.com, www.binder-defence.com, stage.binder-defence.com)
-    \\\$trustedPattern = '(.*\\\\.)?binder-defence\\\\.com|(.*\\\\.)?binder-defense\\\\.com|(.*\\\\.)?binder-defence\\\\.de|(.*\\\\.)?binder-defense\\\\.de';
+    // Configure trusted hosts pattern from environment or use default
+    \\\$envPattern = getenv('TYPO3_TRUSTED_HOSTS_PATTERN');
+    \\\$trustedPattern = !empty(\\\$envPattern) ? \\\$envPattern : '(.*\\\\.)?binder-defence\\\\.com|(.*\\\\.)?binder-defense\\\\.com|(.*\\\\.)?binder-defence\\\\.de|(.*\\\\.)?binder-defense\\\\.de';
     if (!isset(\\\$settings['SYS']['trustedHostsPattern']) || \\\$settings['SYS']['trustedHostsPattern'] !== \\\$trustedPattern) {
         \\\$settings['SYS']['trustedHostsPattern'] = \\\$trustedPattern;
         \\\$changed = true;
