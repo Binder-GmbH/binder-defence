@@ -38,6 +38,7 @@ jobs:
             !source/public/fileadmin
             !source/public/typo3temp
           retention-days: 1
+          include-hidden-files: true
 
   build:
     name: Build Docker Image

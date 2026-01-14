@@ -82,5 +82,16 @@ Der heruntergeladene Artifact zeigt:
 - Das Problem war beim Docker Build: `COPY ./source /app/source` hat vendor/ ignoriert wegen .dockerignore
 - Deshalb war im fertigen Image kein vendor/ vorhanden
 
-### Fix committed
-Entfernt `source/vendor` aus `.dockerignore` damit der vendor/ Ordner im Production-Image landet.
+### Fix 1: .dockerignore
+Entfernt `source/vendor` aus `.dockerignore` damit der vendor/ Ordner im Production-Image landen KÖNNTE.
+
+### ABER WAIT: ZWEITER ROOT CAUSE!
+
+Nach dem Fix war vendor/ IMMER NOCH nicht im Artifact! Warum?
+
+**Root Cause 2**: `upload-artifact@v4` respektiert standardmäßig `.gitignore`!
+Und `.gitignore` enthält `source/vendor/`.
+
+### Fix 2: include-hidden-files
+Hinzugefügt `include-hidden-files: true` zum `upload-artifact` Step.
+Dies zwingt GitHub Actions, die .gitignore zu IGNORIEREN und ALLE Files zu uploaden (außer die explizit excludierten mit `!`).
