@@ -13,6 +13,6 @@ mkdir -p /app/shared/fileadmin \
   /app/shared/var/log \
   /app/shared/uploads
 
-php /app/source/typo3 install:fixfolderstructure
+php /app/source/vendor/bin/typo3 install:fixfolderstructure
 
 EOF
