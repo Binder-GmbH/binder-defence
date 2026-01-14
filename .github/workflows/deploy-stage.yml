@@ -120,15 +120,15 @@ jobs:
 
             # Pull new image
             export GITHUB_REPOSITORY="${{ github.repository }}"
-            docker compose pull app
+            docker compose --env-file .env.stage -f docker-compose.stage.yml pull app
 
             # Restart container
-            docker compose up -d app
+            docker compose --env-file .env.stage -f docker-compose.stage.yml up -d app
 
             # Show logs
-            docker compose logs --tail=50 app
+            docker compose --env-file .env.stage -f docker-compose.stage.yml logs --tail=50 app
           EOF
 
       - name: Verify deployment
         run: |
-          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd /var/www/binder-defence && docker compose ps"
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd /var/www/binder-defence && docker compose --env-file .env.stage -f docker-compose.stage.yml ps"
