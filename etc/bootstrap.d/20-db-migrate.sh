@@ -11,8 +11,9 @@ find /app/source/var/cache/ -type f -name "cached-config*.php" -delete -print
 # Database schema is now managed via extension:setup
 # Skip for now - will be done via TYPO3 install tool
 
-/app/source/vendor/bin/typo3 cache:flush
-/app/source/vendor/bin/typo3 cache:warmup
+# Try to flush cache, but don't fail if cache tables don't exist yet
+/app/source/vendor/bin/typo3 cache:flush || echo "Cache flush skipped (database not initialized)"
+/app/source/vendor/bin/typo3 cache:warmup || echo "Cache warmup skipped (database not initialized)"
 
-echo "Migration and cache clear are done!"
+echo "Migration and cache operations are done!"
 EOF
