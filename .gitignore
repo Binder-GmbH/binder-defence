@@ -3,7 +3,6 @@ source/public/
 source/vendor/
 source/var/
 source/.Build/
-source/composer.lock
 
 # IDE
 .idea/
