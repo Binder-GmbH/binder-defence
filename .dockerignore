@@ -6,5 +6,6 @@
 *.md
 docker/
 .dockerignore
-source/public
+source/public/fileadmin
+source/public/typo3temp
 source/var
