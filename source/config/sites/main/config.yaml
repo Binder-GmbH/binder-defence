@@ -1,0 +1,13 @@
+base: /
+baseVariants: []
+languages:
+  - languageId: 0
+    title: English
+    enabled: true
+    base: /
+    locale: en_US.UTF-8
+    navigationTitle: English
+    flag: gb
+rootPageId: 1
+routes: []
+websiteTitle: Binder Defence
