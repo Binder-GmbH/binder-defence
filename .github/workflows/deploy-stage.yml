@@ -28,6 +28,19 @@ jobs:
           cd source
           composer install --no-dev --optimize-autoloader --no-progress --no-interaction --ignore-platform-reqs
 
+      - name: Debug - Check what was installed
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          echo "=== source/ exists? ==="
+          ls -la source/ || echo "No source/ in root"
+          echo "=== source/vendor/ size ==="
+          du -sh source/vendor/ 2>&1 || echo "No source/vendor/"
+          echo "=== source/vendor/ contents (first 20) ==="
+          ls -la source/vendor/ 2>&1 | head -20 || echo "Cannot list"
+          echo "=== source/vendor/bin/ ==="
+          ls -la source/vendor/bin/ 2>&1 || echo "No bin/"
+
       - name: Upload compiled source
         uses: actions/upload-artifact@v4
         with:
