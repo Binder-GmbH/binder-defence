@@ -45,4 +45,4 @@ jobs:
 
       - name: Restart Docker containers
         run: |
-          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd ${{ secrets.STAGE_PATH }} && docker-compose up -d"
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd ${{ secrets.STAGE_PATH }} && docker compose up -d"
