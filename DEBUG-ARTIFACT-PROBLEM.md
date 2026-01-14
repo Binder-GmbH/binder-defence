@@ -92,6 +92,18 @@ Nach dem Fix war vendor/ IMMER NOCH nicht im Artifact! Warum?
 **Root Cause 2**: `upload-artifact@v4` respektiert standardmäßig `.gitignore`!
 Und `.gitignore` enthält `source/vendor/`.
 
-### Fix 2: include-hidden-files
-Hinzugefügt `include-hidden-files: true` zum `upload-artifact` Step.
-Dies zwingt GitHub Actions, die .gitignore zu IGNORIEREN und ALLE Files zu uploaden (außer die explizit excludierten mit `!`).
+### Fix 2 (fehlgeschlagen): include-hidden-files
+Versuch: `include-hidden-files: true` hinzugefügt.
+Resultat: HAT NICHT FUNKTIONIERT! Artifact immer noch nur 33.3MB.
+`upload-artifact@v4` respektiert `.gitignore` TROTZDEM.
+
+### DRITTER ROOT CAUSE & FINALE LÖSUNG!
+
+**Root Cause 3**: Es gibt KEINEN einfachen Weg, `upload-artifact@v4` zu zwingen, `.gitignore` zu ignorieren.
+
+**Finale Lösung**: Vendor/ als SEPARATES Artifact uploaden!
+- Artifact 1: "source-code" mit `!source/vendor` exclude
+- Artifact 2: "vendor" mit path: `source/vendor/`
+- Im Build Job: Beide artifacts downloaden und zusammenfügen
+
+Da vendor/ explizit als PATH angegeben wird (nicht in einem parent directory das .gitignore hat), wird es NICHT von .gitignore Regeln betroffen!

@@ -41,17 +41,24 @@ jobs:
           echo "=== source/vendor/bin/ ==="
           ls -la source/vendor/bin/ 2>&1 || echo "No bin/"
 
-      - name: Upload compiled source
+      - name: Upload source code (without vendor)
         uses: actions/upload-artifact@v4
         with:
-          name: compiled-source
+          name: source-code
           path: |
             source/
+            !source/vendor
             !source/var
             !source/public/fileadmin
             !source/public/typo3temp
           retention-days: 1
-          include-hidden-files: true
+
+      - name: Upload vendor directory separately
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor
+          path: source/vendor/
+          retention-days: 1
 
   build:
     name: Build Docker Image
@@ -64,11 +71,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download compiled source
+      - name: Download source code
         uses: actions/download-artifact@v4
         with:
-          name: compiled-source
+          name: source-code
           path: .
+
+      - name: Download vendor directory
+        uses: actions/download-artifact@v4
+        with:
+          name: vendor
+          path: source/vendor/
 
       - name: Debug - List files
         run: |
