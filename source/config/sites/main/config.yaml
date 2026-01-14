@@ -6,10 +6,29 @@ languages:
   - languageId: 0
     title: English
     enabled: true
-    base: /
+    base: /en/
     locale: en_US.UTF-8
     navigationTitle: English
     flag: gb
+    typo3Language: default
+  - languageId: 1
+    title: Deutsch
+    enabled: true
+    base: /de/
+    locale: de_DE.UTF-8
+    navigationTitle: Deutsch
+    flag: de
+    typo3Language: de
+    fallbackType: strict
+  - languageId: 2
+    title: Français
+    enabled: true
+    base: /fr/
+    locale: fr_FR.UTF-8
+    navigationTitle: Français
+    flag: fr
+    typo3Language: fr
+    fallbackType: strict
 rootPageId: 1
 routes: []
 websiteTitle: Binder Defence

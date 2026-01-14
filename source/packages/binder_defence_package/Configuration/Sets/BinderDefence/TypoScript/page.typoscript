@@ -52,6 +52,10 @@ page {
                 special = directory
                 special.value = 1
             }
+            30 = language-menu
+            30 {
+                as = languageNavigation
+            }
         }
     }
 
