@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /certs/binder-defence.local.crt
+      keyFile: /certs/binder-defence.local.key
