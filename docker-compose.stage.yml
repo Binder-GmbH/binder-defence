@@ -9,6 +9,8 @@ services:
       - ./stage/var:/app/source/var
       - ./stage/fileadmin:/app/source/public/fileadmin
       - ./stage/typo3temp:/app/source/public/typo3temp
+      # Public HTML files (for FTP access)
+      - ./stage/public:/app/source/public
       # Shared folder for other persistent data
       - ./stage/shared:/app/shared
     labels:
