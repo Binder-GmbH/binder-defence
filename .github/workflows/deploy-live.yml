@@ -40,11 +40,14 @@ jobs:
             !source/public/typo3temp
           retention-days: 1
 
-      - name: Upload vendor directory separately
+      - name: Create vendor tarball (bypass gitignore)
+        run: tar -czf /tmp/vendor.tar.gz -C source vendor/
+
+      - name: Upload vendor tarball
         uses: actions/upload-artifact@v4
         with:
           name: vendor
-          path: source/vendor/
+          path: /tmp/vendor.tar.gz
           retention-days: 1
 
   build:
@@ -64,11 +67,14 @@ jobs:
           name: source-code
           path: .
 
-      - name: Download vendor directory
+      - name: Download vendor tarball
         uses: actions/download-artifact@v4
         with:
           name: vendor
-          path: source/vendor/
+          path: /tmp/
+
+      - name: Extract vendor tarball
+        run: tar -xzf /tmp/vendor.tar.gz -C source/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

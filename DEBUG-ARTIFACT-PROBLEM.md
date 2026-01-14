@@ -107,3 +107,20 @@ Resultat: HAT NICHT FUNKTIONIERT! Artifact immer noch nur 33.3MB.
 - Im Build Job: Beide artifacts downloaden und zusammenfügen
 
 Da vendor/ explizit als PATH angegeben wird (nicht in einem parent directory das .gitignore hat), wird es NICHT von .gitignore Regeln betroffen!
+
+### FIX 3 FEHLGESCHLAGEN! Root Cause 4!
+
+Auch mit separatem Artifact war vendor/ NUR 28.8 MB statt 121 MB!
+Warum? Weil `upload-artifact@v4` checkt .gitignore relativ zum REPO ROOT!
+
+Wenn ich `path: source/vendor/` angebe, prüft GitHub Actions:
+1. Ist `source/vendor/` in `.gitignore`? → JA!
+2. → Skip upload!
+
+**FINALE LÖSUNG (wirklich diesmal)**: TAR-Archive verwenden!
+- Erstelle TAR von vendor/: `tar -czf /tmp/vendor.tar.gz -C source vendor/`
+- Upload das TAR (liegt in /tmp/, nicht in source/)
+- Download TAR
+- Extract TAR: `tar -xzf /tmp/vendor.tar.gz -C source/`
+
+TAR liegt außerhalb vom repo → .gitignore greift NICHT!
