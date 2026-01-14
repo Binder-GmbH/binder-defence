@@ -18,7 +18,8 @@ if [ -n "$TYPO3_ENCRYPTION_KEY" ]; then
     }
 
     // Configure trusted hosts pattern for all binder-defence/defense domains
-    \\\$trustedPattern = '.*\\\\.binder-defence\\\\.com|.*\\\\.binder-defense\\\\.com|.*\\\\.binder-defence\\\\.de|.*\\\\.binder-defense\\\\.de';
+    // Match both root domains and subdomains (e.g., binder-defence.com, www.binder-defence.com, stage.binder-defence.com)
+    \\\$trustedPattern = '(.*\\\\.)?binder-defence\\\\.com|(.*\\\\.)?binder-defense\\\\.com|(.*\\\\.)?binder-defence\\\\.de|(.*\\\\.)?binder-defense\\\\.de';
     if (!isset(\\\$settings['SYS']['trustedHostsPattern']) || \\\$settings['SYS']['trustedHostsPattern'] !== \\\$trustedPattern) {
         \\\$settings['SYS']['trustedHostsPattern'] = \\\$trustedPattern;
         \\\$changed = true;
