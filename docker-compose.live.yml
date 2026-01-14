@@ -13,16 +13,23 @@ services:
       - ./live/shared:/app/shared
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app-live.rule=Host(`${APP_DOMAIN}`)"
+      # Main router - listens on both www and non-www
+      - "traefik.http.routers.app-live.rule=Host(`binder-defence.com`, `www.binder-defence.com`, `binder-defense.com`, `www.binder-defense.com`, `binder-defence.de`, `www.binder-defence.de`, `binder-defense.de`, `www.binder-defense.de`)"
       - "traefik.http.routers.app-live.entrypoints=websecure"
       - "traefik.http.routers.app-live.tls=true"
       - "traefik.http.routers.app-live.tls.certresolver=letsencrypt"
       - "traefik.http.services.app-live.loadbalancer.server.port=80"
-      - "traefik.http.routers.app-live-http.rule=Host(`${APP_DOMAIN}`)"
+      # HTTP router with www removal middleware
+      - "traefik.http.routers.app-live-http.rule=Host(`binder-defence.com`, `www.binder-defence.com`, `binder-defense.com`, `www.binder-defense.com`, `binder-defence.de`, `www.binder-defence.de`, `binder-defense.de`, `www.binder-defense.de`)"
       - "traefik.http.routers.app-live-http.entrypoints=web"
       - "traefik.http.routers.app-live-http.middlewares=redirect-to-https"
+      # WWW removal middleware for HTTPS - redirect www to non-www
+      - "traefik.http.middlewares.remove-www-live.redirectregex.regex=^https://www\\\\.(.*)"
+      - "traefik.http.middlewares.remove-www-live.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.remove-www-live.redirectregex.permanent=true"
+      - "traefik.http.routers.app-live.middlewares=remove-www-live"
       - "traefik.http.middlewares.typo3-headers-live.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.typo3-headers-live.headers.customrequestheaders.X-Forwarded-Host=${APP_DOMAIN}"
+      - "traefik.http.middlewares.typo3-headers-live.headers.customrequestheaders.X-Forwarded-Host=binder-defence.com"
     env_file:
       - .env.live
     depends_on:
