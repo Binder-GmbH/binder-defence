@@ -5,10 +5,14 @@ on:
     branches:
       - main
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
+jobs:
+  compile:
+    name: Compile TYPO3
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,28 +28,108 @@ jobs:
           cd source
           composer install --no-dev --optimize-autoloader --no-progress --no-interaction --ignore-platform-reqs
 
+      - name: Upload compiled source
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-source
+          path: |
+            source/
+            !source/var
+            !source/public/fileadmin
+            !source/public/typo3temp
+          retention-days: 1
+
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: compile
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download compiled source
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-source
+          path: source/
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=live
+            type=raw,value=latest
+            type=sha,prefix=live-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:live
+          cache-to: type=inline
+
+  deploy:
+    name: Deploy to Live Server
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.PROD_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.LIVE_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to Live Server
+      - name: Copy docker-compose and env files to server
         run: |
-          rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.env' \
-            --exclude='source/var' \
-            --exclude='source/public/fileadmin' \
-            --exclude='source/public/typo3temp' \
-            --exclude='docker/mysql/data' \
-            ./ ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_PATH }}/
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.LIVE_HOST }} "mkdir -p /var/www/binder-defence"
+          scp docker-compose.live.yml ${{ secrets.SSH_USER }}@${{ secrets.LIVE_HOST }}:/var/www/binder-defence/docker-compose.yml
 
-          # Copy live environment config
-          scp .env.live ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_PATH }}/.env
+          # Copy .env.live if exists (don't overwrite existing .env)
+          if [ -f .env.live ]; then
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.LIVE_HOST }} "test -f /var/www/binder-defence/.env.live || echo 'Create .env.live on server manually'"
+          fi
 
-      - name: Restart Docker containers
+      - name: Deploy on Live Server
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "cd ${{ secrets.PROD_PATH }} && docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.LIVE_HOST }} << 'EOF'
+            cd /var/www/binder-defence
+
+            # Login to GitHub Container Registry
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Pull new image
+            export GITHUB_REPOSITORY="${{ github.repository }}"
+            docker compose pull app
+
+            # Restart container
+            docker compose up -d app
+
+            # Show logs
+            docker compose logs --tail=50 app
+          EOF
+
+      - name: Verify deployment
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.LIVE_HOST }} "cd /var/www/binder-defence && docker compose ps"

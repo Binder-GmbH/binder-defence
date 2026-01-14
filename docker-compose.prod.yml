@@ -1,0 +1,12 @@
+# Production override - no volumes that would override built-in code
+services:
+  app:
+    volumes:
+      # Remove app_source and app_shared volumes - code is baked into image
+      # Only keep PHP config if needed
+      - ./etc/php/production.ini:/usr/local/etc/php/conf.d/zz_99_production.ini
+
+  traefik:
+    # Remove local cert files - Cloudflare handles SSL
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
