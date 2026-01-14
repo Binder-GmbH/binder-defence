@@ -8,5 +8,6 @@
 return [
     'SYS' => [
         'trustedHostsPattern' => '.*\\.binder-defence\\.com|.*\\.binder-defense\\.com|.*\\.binder-defence\\.de|.*\\.binder-defense\\.de',
+        'encryptionKey' => getenv('TYPO3_ENCRYPTION_KEY') ?: '',
     ],
 ];
