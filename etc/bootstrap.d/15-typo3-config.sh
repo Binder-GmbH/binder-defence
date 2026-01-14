@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Update TYPO3 configuration with environment variables
-if [ -n "$TYPO3_ENCRYPTION_KEY" ]; then
+if [ -n "${TYPO3_ENCRYPTION_KEY:-}" ]; then
     echo "Configuring TYPO3 settings from environment..."
 
     su -p application <<EOFPHP
