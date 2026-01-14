@@ -17,6 +17,14 @@ if [ -n "$TYPO3_ENCRYPTION_KEY" ]; then
         echo 'Encryption key set' . PHP_EOL;
     }
 
+    // Configure trusted hosts pattern for all binder-defence/defense domains
+    \\\$trustedPattern = '.*\\\\.binder-defence\\\\.com|.*\\\\.binder-defense\\\\.com|.*\\\\.binder-defence\\\\.de|.*\\\\.binder-defense\\\\.de';
+    if (!isset(\\\$settings['SYS']['trustedHostsPattern']) || \\\$settings['SYS']['trustedHostsPattern'] !== \\\$trustedPattern) {
+        \\\$settings['SYS']['trustedHostsPattern'] = \\\$trustedPattern;
+        \\\$changed = true;
+        echo 'Trusted hosts pattern set' . PHP_EOL;
+    }
+
     // Configure reverse proxy settings for Traefik
     if (!isset(\\\$settings['BE']['lockSSL']) || \\\$settings['BE']['lockSSL'] !== true) {
         \\\$settings['BE']['lockSSL'] = true;
