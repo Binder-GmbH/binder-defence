@@ -9,7 +9,12 @@ set -e
 
 # Ensure subdirectories exist in mounted volumes
 mkdir -p /app/source/var/cache \
-  /app/source/var/log
+  /app/source/var/log \
+  /app/source/public/fileadmin \
+  /app/source/public/typo3temp
+
+# Remove FIRST_INSTALL if it exists (prevents "installation required" message)
+rm -f /app/source/public/FIRST_INSTALL
 
 # install:fixfolderstructure does not exist in TYPO3 13
 # Folders are created by mkdir above
