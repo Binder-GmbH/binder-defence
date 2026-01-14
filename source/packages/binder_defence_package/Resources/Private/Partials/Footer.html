@@ -1,12 +1,36 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <footer>
     <div class="container">
-        <p>&copy; {f:format.date(format: 'Y')} BINDER Defence. All rights reserved.</p>
-        <nav>
-            <f:for each="{footerNavigation}" as="item">
-                <a href="{item.link}">{item.title}</a>
-            </f:for>
-        </nav>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>BINDER Defence</h4>
+                <p>Professional laboratory equipment and precision chambers for research and industry.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <f:for each="{footerNavigation}" as="item">
+                        <li><a href="{item.link}">{item.title}</a></li>
+                    </f:for>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li>BINDER GmbH</li>
+                    <li>Email: info@binder-defence.com</li>
+                    <li>Phone: +49 (0) 123 456789</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {f:format.date(format: 'Y')} BINDER Defence. All rights reserved.</p>
+            <nav>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/imprint">Imprint</a>
+                <a href="/terms">Terms & Conditions</a>
+            </nav>
+        </div>
     </div>
 </footer>
 <f:asset.script identifier="main" src="EXT:binder_defence_package/Resources/Public/JavaScript/main.js" />

@@ -8,7 +8,9 @@
 <body>
 <header>
     <div class="container">
-        <div class="logo">BINDER Defence</div>
+        <div class="logo">
+            BINDER <span>Defence</span>
+        </div>
         <nav>
             <f:for each="{mainNavigation}" as="item">
                 <a href="{item.link}" class="{f:if(condition: item.active, then: 'active')}">{item.title}</a>
@@ -16,4 +18,3 @@
         </nav>
     </div>
 </header>
-</html>

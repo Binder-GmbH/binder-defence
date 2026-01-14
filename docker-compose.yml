@@ -29,6 +29,7 @@ services:
     volumes:
       - app_source:/app/source
       - app_shared:/app/shared
+      - ./source/packages:/app/source/packages
       - ./etc/php/development.ini:/usr/local/etc/php/conf.d/zz_99_development.ini
     depends_on:
       - mysql

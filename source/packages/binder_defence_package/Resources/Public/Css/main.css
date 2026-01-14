@@ -1,83 +1,278 @@
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
+/* ===================================
+   BINDER Defence - Professional Design
+   Inspired by binder-world.com
+   =================================== */
+
+/* CSS Variables */
+:root {
+    --color-primary: #003366;
+    --color-secondary: #0066cc;
+    --color-text: #333333;
+    --color-text-light: #666666;
+    --color-bg: #ffffff;
+    --color-bg-light: #f8f9fa;
+    --color-border: #e0e0e0;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --max-width: 1400px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 4rem;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    font-size: 16px;
     line-height: 1.6;
-    color: #333;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-primary);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+a {
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--max-width);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--spacing-md);
 }
 
-/* Header */
+/* ===================================
+   Header
+   =================================== */
 header {
-    background: #2c3e50;
-    color: white;
-    padding: 1rem 0;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
 }
 
-header .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+.logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: -0.5px;
 }
 
-header nav a {
+.logo span {
+    color: var(--color-secondary);
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+nav a {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    color: var(--color-text);
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background-color: var(--color-bg-light);
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+nav a.active {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* ===================================
+   Main Content
+   =================================== */
+main {
+    min-height: 70vh;
+    padding: var(--spacing-xl) 0;
+}
+
+.content-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.content-section h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
+}
+
+/* Content Elements */
+.frame {
+    margin-bottom: var(--spacing-md);
+}
+
+.frame-type-textpic,
+.frame-type-text,
+.frame-type-header {
+    padding: var(--spacing-md) 0;
+}
+
+.frame-type-header h1,
+.frame-type-header h2 {
+    border-bottom: 3px solid var(--color-secondary);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ===================================
+   Footer
+   =================================== */
+footer {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-xl) 0 var(--spacing-md) 0;
+    margin-top: var(--spacing-xl);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-column h4 {
+    color: white;
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-column a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    margin-left: 0.5rem;
 }
 
-header nav a:hover,
-header nav a.active {
-    background: #34495e;
-    border-radius: 4px;
-}
-
-/* Main */
-main {
-    min-height: 60vh;
-    padding: 2rem 0;
-}
-
-main h1 {
-    margin-bottom: 1rem;
-}
-
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: white;
-    padding: 2rem 0;
-    margin-top: 3rem;
-}
-
-footer .container {
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: var(--spacing-md);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
 }
 
-footer nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 1rem;
+.footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
 }
 
-footer nav a:hover {
-    text-decoration: underline;
+.footer-bottom nav {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.footer-bottom nav a {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+@media (max-width: 768px) {
+    :root {
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 2.5rem;
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+
+    header .container {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
 }

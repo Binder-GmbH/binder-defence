@@ -16,6 +16,7 @@ lib.dynamicContent {
             orderBy = sorting
             where = {#colPos}={register:colPos}
             where.insertData = 1
+            languageField = sys_language_uid
         }
     }
     90 = RESTORE_REGISTER
