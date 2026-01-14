@@ -39,17 +39,17 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`binder-defence.local`)"
+      - "traefik.http.routers.app.rule=Host(`${APP_DOMAIN:-binder-defence.local}`)"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls=true"
       - "traefik.http.routers.app.middlewares=typo3-headers"
       - "traefik.http.services.app.loadbalancer.server.port=80"
-      - "traefik.http.routers.app-http.rule=Host(`binder-defence.local`)"
+      - "traefik.http.routers.app-http.rule=Host(`${APP_DOMAIN:-binder-defence.local}`)"
       - "traefik.http.routers.app-http.entrypoints=web"
       - "traefik.http.routers.app-http.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Host=binder-defence.local"
+      - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Host=${APP_DOMAIN:-binder-defence.local}"
     env_file:
       - .env
 

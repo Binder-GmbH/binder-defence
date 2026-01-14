@@ -22,3 +22,7 @@ Thumbs.db
 # Temp
 tmp/
 temp/
+
+# Environment files (server-specific)
+.env.stage
+.env.live

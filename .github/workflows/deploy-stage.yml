@@ -36,6 +36,7 @@ jobs:
           rsync -avz --delete \
             --exclude='.git' \
             --exclude='.github' \
+            --exclude='.env' \
             --exclude='source/var' \
             --exclude='source/public/fileadmin' \
             --exclude='source/public/typo3temp' \
