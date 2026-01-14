@@ -1,0 +1,121 @@
+services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.file.directory=/certs"
+      - "--providers.file.watch=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--log.level=DEBUG"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker/traefik:/certs:ro
+    networks:
+      - web
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE}
+    volumes:
+      - ./source:/app/source
+      - ./shared:/app/shared
+      - ./etc/php/development.ini:/usr/local/etc/php/conf.d/zz_99_development.ini
+    depends_on:
+      - mysql
+      - redis
+      - traefik
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`${APP_DOMAIN:-binder-defence.local}`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.routers.app.middlewares=typo3-headers"
+      - "traefik.http.services.app.loadbalancer.server.port=80"
+      - "traefik.http.routers.app-http.rule=Host(`${APP_DOMAIN:-binder-defence.local}`)"
+      - "traefik.http.routers.app-http.entrypoints=web"
+      - "traefik.http.routers.app-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Host=${APP_DOMAIN:-binder-defence.local}"
+    env_file:
+      - .env
+
+  mysql:
+    build:
+      context: docker/mysql/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${DATABASE_PORT}:3306"
+    command: |
+      --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/fixtures:/docker-entrypoint-initdb.d
+    networks:
+      - web
+    env_file:
+      - .env
+
+  redis:
+    image: redis:8.0-alpine
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - web
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pma.rule=Host(`pma.binder-defence.local`)"
+      - "traefik.http.routers.pma.entrypoints=websecure"
+      - "traefik.http.routers.pma.tls=true"
+      - "traefik.http.services.pma.loadbalancer.server.port=80"
+    env_file:
+      - .env
+
+  mailhog:
+    image: mailhog/mailhog
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mail.binder-defence.local`)"
+      - "traefik.http.routers.mailhog.entrypoints=websecure"
+      - "traefik.http.routers.mailhog.tls=true"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+
+networks:
+  web:
+    driver: bridge
+
+volumes:
+  app_source:
+  app_shared:
+  mysql_data:
+  redis_data:

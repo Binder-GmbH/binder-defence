@@ -31,18 +31,11 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.STAGE_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to Stage Server
+      - name: Deploy TYPO3 code to Stage Server
         run: |
+          # Only deploy the TYPO3 source code, not dev files
           rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.env' \
-            --exclude='source/var' \
-            --exclude='source/public/fileadmin' \
-            --exclude='source/public/typo3temp' \
-            --exclude='docker/mysql/data' \
-            ./ ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:${{ secrets.STAGE_PATH }}/
-
-      - name: Restart Docker containers
-        run: |
-          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd ${{ secrets.STAGE_PATH }} && docker compose up -d"
+            --exclude='var' \
+            --exclude='public/fileadmin' \
+            --exclude='public/typo3temp' \
+            ./source/ ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:${{ secrets.STAGE_PATH }}/

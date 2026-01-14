@@ -43,6 +43,9 @@ jobs:
             --exclude='docker/mysql/data' \
             ./ ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_PATH }}/
 
+          # Copy live environment config
+          scp .env.live ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:${{ secrets.PROD_PATH }}/.env
+
       - name: Restart Docker containers
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "cd ${{ secrets.PROD_PATH }} && docker compose up -d"
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "cd ${{ secrets.PROD_PATH }} && docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build"
