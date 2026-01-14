@@ -28,6 +28,19 @@ jobs:
           cd source
           composer install --no-dev --optimize-autoloader --no-progress --no-interaction --ignore-platform-reqs
 
+      - name: Debug - Check what was installed
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          echo "=== source/ exists? ==="
+          ls -la source/ || echo "No source/ in root"
+          echo "=== source/vendor/ size ==="
+          du -sh source/vendor/ 2>&1 || echo "No source/vendor/"
+          echo "=== source/vendor/ contents (first 20) ==="
+          ls -la source/vendor/ 2>&1 | head -20 || echo "Cannot list"
+          echo "=== source/vendor/bin/ ==="
+          ls -la source/vendor/bin/ 2>&1 || echo "No bin/"
+
       - name: Upload source code (without vendor)
         uses: actions/upload-artifact@v4
         with:
@@ -95,6 +108,15 @@ jobs:
       - name: Extract public tarball
         run: tar -xzf /tmp/public.tar.gz -C source/
 
+      - name: Debug - List files
+        run: |
+          echo "=== Root directory ==="
+          ls -la
+          echo "=== source/ directory ==="
+          ls -la source/ || echo "source/ not found"
+          echo "=== source/vendor/ directory ==="
+          ls -la source/vendor/ || echo "source/vendor/ not found"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -138,21 +160,21 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.LIVE_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.PROD_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy docker-compose and env files to server
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "mkdir -p /var/www/binder-defence"
-          scp docker-compose.live.yml ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }}:/var/www/binder-defence/docker-compose.live.yml
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "mkdir -p /var/www/binder-defence"
+          scp docker-compose.live.yml ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }}:/var/www/binder-defence/docker-compose.live.yml
 
           # Copy .env.live if exists (don't overwrite existing .env)
           if [ -f .env.live ]; then
-            ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "test -f /var/www/binder-defence/.env.live || echo 'Create .env.live on server manually'"
+            ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "test -f /var/www/binder-defence/.env.live || echo 'Create .env.live on server manually'"
           fi
 
       - name: Deploy on Live Server
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} << 'EOF'
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
             cd /var/www/binder-defence
 
             # Login to GitHub Container Registry
@@ -171,4 +193,4 @@ jobs:
 
       - name: Verify deployment
         run: |
-          ssh ${{ secrets.PROD_USER }}@${{ secrets.LIVE_HOST }} "cd /var/www/binder-defence && docker compose --env-file .env.live -f docker-compose.live.yml ps"
+          ssh ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "cd /var/www/binder-defence && docker compose --env-file .env.live -f docker-compose.live.yml ps"
