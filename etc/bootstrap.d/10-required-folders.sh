@@ -13,6 +13,7 @@ mkdir -p /app/shared/fileadmin \
   /app/shared/var/log \
   /app/shared/uploads
 
-php /app/source/vendor/bin/typo3 install:fixfolderstructure
+# install:fixfolderstructure does not exist in TYPO3 13
+# Folders are created by mkdir above
 
 EOF
