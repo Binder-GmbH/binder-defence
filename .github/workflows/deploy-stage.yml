@@ -102,17 +102,17 @@ jobs:
 
       - name: Copy docker-compose and env files to server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.STAGE_HOST }} "mkdir -p /var/www/binder-defence"
-          scp docker-compose.stage.yml ${{ secrets.SSH_USER }}@${{ secrets.STAGE_HOST }}:/var/www/binder-defence/docker-compose.yml
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "mkdir -p /var/www/binder-defence"
+          scp docker-compose.stage.yml ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:/var/www/binder-defence/docker-compose.yml
 
           # Copy .env.stage if exists (don't overwrite existing .env)
           if [ -f .env.stage ]; then
-            ssh ${{ secrets.SSH_USER }}@${{ secrets.STAGE_HOST }} "test -f /var/www/binder-defence/.env.stage || echo 'Create .env.stage on server manually'"
+            ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "test -f /var/www/binder-defence/.env.stage || echo 'Create .env.stage on server manually'"
           fi
 
       - name: Deploy on Stage Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.STAGE_HOST }} << 'EOF'
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} << 'EOF'
             cd /var/www/binder-defence
 
             # Login to GitHub Container Registry
@@ -131,4 +131,4 @@ jobs:
 
       - name: Verify deployment
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.STAGE_HOST }} "cd /var/www/binder-defence && docker compose ps"
+          ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "cd /var/www/binder-defence && docker compose ps"
