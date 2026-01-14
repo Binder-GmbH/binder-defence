@@ -56,6 +56,15 @@ jobs:
           name: compiled-source
           path: .
 
+      - name: Debug - List files
+        run: |
+          echo "=== Root directory ==="
+          ls -la
+          echo "=== source/ directory ==="
+          ls -la source/ || echo "source/ not found"
+          echo "=== source/vendor/ directory ==="
+          ls -la source/vendor/ || echo "source/vendor/ not found"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
