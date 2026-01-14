@@ -16,13 +16,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: mbstring, xml, ctype, json, pdo, pdo_mysql
 
       - name: Install Composer dependencies
         run: |
           cd source
-          composer install --no-dev --optimize-autoloader --no-progress --no-interaction
+          composer install --no-dev --optimize-autoloader --no-progress --no-interaction --ignore-platform-reqs
 
       - name: Setup SSH
         run: |
