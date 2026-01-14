@@ -69,4 +69,18 @@ Der heruntergeladene Artifact zeigt:
 
 3. **ZULETZT:** Build Job kann bleiben wie er ist (mit path: .)
 
-## Status: WARTEN AUF DEBUG OUTPUT VOM NÄCHSTEN RUN
+## Status: ROOT CAUSE GEFUNDEN UND GEFIXT!
+
+### Root Cause
+`.dockerignore` enthielt `source/vendor`, was bedeutet dass `COPY ./source /app/source` im Dockerfile den vendor/ Ordner NICHT kopiert hat!
+
+### Lösung
+`source/vendor` aus `.dockerignore` entfernt.
+
+### Warum war das Problem so verwirrend?
+- Artifact Upload/Download hat PERFEKT funktioniert (121M, alle Files)
+- Das Problem war beim Docker Build: `COPY ./source /app/source` hat vendor/ ignoriert wegen .dockerignore
+- Deshalb war im fertigen Image kein vendor/ vorhanden
+
+### Fix committed
+Entfernt `source/vendor` aus `.dockerignore` damit der vendor/ Ordner im Production-Image landet.

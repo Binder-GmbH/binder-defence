@@ -6,6 +6,5 @@
 *.md
 docker/
 .dockerignore
-source/vendor
 source/public
 source/var
