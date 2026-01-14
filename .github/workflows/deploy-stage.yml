@@ -103,7 +103,7 @@ jobs:
       - name: Copy docker-compose and env files to server
         run: |
           ssh ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }} "mkdir -p /var/www/binder-defence"
-          scp docker-compose.stage.yml ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:/var/www/binder-defence/docker-compose.yml
+          scp docker-compose.stage.yml ${{ secrets.STAGE_USER }}@${{ secrets.STAGE_HOST }}:/var/www/binder-defence/docker-compose.stage.yml
 
           # Copy .env.stage if exists (don't overwrite existing .env)
           if [ -f .env.stage ]; then
