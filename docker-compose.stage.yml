@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/${GITHUB_REPOSITORY}:stage
+    image: ghcr.io/binder-gmbh/binder-defence:stage
     restart: unless-stopped
     networks:
       - web
