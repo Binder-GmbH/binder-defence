@@ -1,13 +1,3 @@
-DB:
-    Connections:
-        Default:
-            charset: utf8mb4
-            dbname: typo3
-            driver: mysqli
-            host: mysql
-            password: bN7qW3xRmK9pL2vGhJ
-            port: 3306
-            user: typo3_local
 EXTENSIONS:
     backend:
         loginBackgroundImage: ''
