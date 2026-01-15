@@ -19,7 +19,7 @@ languages:
     navigationTitle: Deutsch
     flag: de
     typo3Language: de
-    fallbackType: strict
+    fallbackType: free
   - languageId: 2
     title: Français
     enabled: true
@@ -28,7 +28,7 @@ languages:
     navigationTitle: Français
     flag: fr
     typo3Language: fr
-    fallbackType: strict
+    fallbackType: free
 rootPageId: 1
 routes: []
 websiteTitle: Binder Defence
