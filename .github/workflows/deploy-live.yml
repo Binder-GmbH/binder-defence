@@ -28,18 +28,10 @@ jobs:
           cd source
           composer install --no-dev --optimize-autoloader --no-progress --no-interaction --ignore-platform-reqs
 
-      - name: Debug - Check what was installed
+      - name: Verify installation
         run: |
-          echo "=== Current directory ==="
-          pwd
-          echo "=== source/ exists? ==="
-          ls -la source/ || echo "No source/ in root"
-          echo "=== source/vendor/ size ==="
-          du -sh source/vendor/ 2>&1 || echo "No source/vendor/"
-          echo "=== source/vendor/ contents (first 20) ==="
-          ls -la source/vendor/ 2>&1 | head -20 || echo "Cannot list"
-          echo "=== source/vendor/bin/ ==="
-          ls -la source/vendor/bin/ 2>&1 || echo "No bin/"
+          echo "Vendor size: $(du -sh source/vendor/ 2>&1 || echo 'N/A')"
+          echo "Composer installed: $(test -d source/vendor && echo 'OK' || echo 'FAILED')"
 
       - name: Upload source code (without vendor)
         uses: actions/upload-artifact@v4
@@ -108,14 +100,10 @@ jobs:
       - name: Extract public tarball
         run: tar -xzf /tmp/public.tar.gz -C source/
 
-      - name: Debug - List files
+      - name: Verify build artifacts
         run: |
-          echo "=== Root directory ==="
-          ls -la
-          echo "=== source/ directory ==="
-          ls -la source/ || echo "source/ not found"
-          echo "=== source/vendor/ directory ==="
-          ls -la source/vendor/ || echo "source/vendor/ not found"
+          echo "Source ready: $(test -d source && echo 'OK' || echo 'FAILED')"
+          echo "Vendor ready: $(test -d source/vendor && echo 'OK' || echo 'FAILED')"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

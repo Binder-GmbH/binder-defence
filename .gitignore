@@ -25,3 +25,12 @@ temp/
 # Environment files (server-specific)
 .env.stage
 .env.live
+.env.production
+*.pem
+*.key
+*.crt
+
+# Security
+secrets/
+credentials/
+*.secret
