@@ -25,7 +25,6 @@ RUN mkdir -p /app/shared && chown $APPLICATION_UID:$APPLICATION_GID /app/shared
 
 COPY --chown=$APPLICATION_UID:$APPLICATION_GID ./source  /app/source
 COPY --chown=$APPLICATION_UID:$APPLICATION_GID ./.env /app/source/.env
-COPY --chown=$APPLICATION_UID:$APPLICATION_GID ./shared/.env.dist /app/source/.env.dist
 
 # Configure volume/workdir
 WORKDIR /app/source/
