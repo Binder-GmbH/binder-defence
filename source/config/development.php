@@ -6,9 +6,10 @@ use TYPO3\CMS\Core\Log\Writer\FileWriter;
 
 return [
     'SYS'  => [
-        'displayErrors' => 1,
-        'devIPmask'     => '*',
-        'sqlDebug'      => 1,
+        'displayErrors'         => 1,
+        'devIPmask'             => '*',
+        'sqlDebug'              => 1,
+        'trustedHostsPattern'   => '.*',
         'caching'       => [
             'cacheConfigurations' => [
                 'pages' => [

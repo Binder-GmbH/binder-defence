@@ -2,8 +2,9 @@
 
 return [
     'SYS' => [
-        'displayErrors' => 0,
-        'devIPmask' => '',
+        'displayErrors'         => 0,
+        'devIPmask'             => '',
+        'trustedHostsPattern'   => '.*',
     ],
     'BE' => [
         'debug' => false,
