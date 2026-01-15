@@ -64,6 +64,9 @@
     "extra": {
         "typo3/cms": {
             "web-dir": "public"
+        },
+        "helhum/dotenv-connector": {
+            "adapter": "Helhum\\DotEnvConnector\\Adapter\\SymfonyLoadEnv"
         }
     },
     "scripts": {
