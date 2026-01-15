@@ -2,7 +2,6 @@
 
 return [
     'SYS' => [
-        'trustedHostsPattern' => '.*',
         'displayErrors' => 1,
         'devIPmask' => '*',
     ],
