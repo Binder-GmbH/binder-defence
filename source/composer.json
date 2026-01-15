@@ -5,6 +5,7 @@
     "type": "project",
     "require": {
         "binder-gmbh/binder-defence-package": "@dev",
+        "helhum/config-loader": "^0.12",
         "helhum/dotenv-connector": "^3.0",
         "typo3/cms-backend": "^13.4",
         "typo3/cms-belog": "^13.4",
