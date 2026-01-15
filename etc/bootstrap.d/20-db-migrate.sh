@@ -2,10 +2,12 @@
 # Change user, avoid root to be cache owner
 su -p application <<EOF
 set -e
-set -o xtrace
 
+echo "Waiting for database connection..."
 /tmp/wait-for-it.sh \$MYSQL_HOST:\${MYSQL_PORT:-3306} -t 360
-find /app/source/var/cache/ -type f -name "cached-config*.php" -delete -print
+
+echo "Clearing cached config files..."
+find /app/source/var/cache/ -type f -name "cached-config*.php" -delete 2>/dev/null || true
 
 # TYPO3 13 removed database:updateschema command
 # Database schema is now managed via extension:setup

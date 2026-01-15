@@ -79,6 +79,8 @@ Im Container beim Start ausführen (`etc/bootstrap.d/`):
 
 ## Status
 
-- ❌ Aktuell: rsync-basiert (FALSCH)
-- ✅ Soll: Docker Image-basiert (wie binder-world)
-- 🚧 TODO: Umstellung auf Image-Deployment
+- ✅ **IMPLEMENTED**: Docker Image-based deployment is fully implemented and operational
+- ✅ Stage deployment: Automatic from `develop` branch → `stage.binder-defence.com`
+- ✅ Live deployment: Automatic from `main` branch → `binder-defence.com`
+- ✅ GitHub Container Registry: Images stored at `ghcr.io/binder-gmbh/binder-defence`
+- ✅ Zero-downtime deployments with atomic image updates
