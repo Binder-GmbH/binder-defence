@@ -5,6 +5,8 @@ services:
     networks:
       - web
     volumes:
+      # Environment configuration
+      - ./.env.stage:/app/source/.env:ro
       # Persistent data volumes
       - ./stage/var:/app/source/var
       - ./stage/fileadmin:/app/source/public/fileadmin
