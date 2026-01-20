@@ -30,6 +30,9 @@ services:
       - app_source:/app/source
       - app_shared:/app/shared
       - ./source/packages:/app/source/packages
+      - ./source/config:/app/source/config
+      - ./source/public:/app/source/public
+      - ./.env.local:/app/source/.env.local:ro
       - ./etc/php/development.ini:/usr/local/etc/php/conf.d/zz_99_development.ini
     depends_on:
       - mysql
@@ -53,7 +56,6 @@ services:
       - "traefik.http.middlewares.typo3-headers.headers.customrequestheaders.X-Forwarded-Host=${APP_DOMAIN:-binder-defence.local}"
     env_file:
       - .env
-      - shared/.env.dist
 
   mysql:
     build:
@@ -71,7 +73,6 @@ services:
       - web
     env_file:
       - .env
-      - shared/.env.dist
 
   redis:
     image: redis:8.0-alpine
@@ -98,7 +99,6 @@ services:
       - "traefik.http.services.pma.loadbalancer.server.port=80"
     env_file:
       - .env
-      - shared/.env.dist
 
   mailhog:
     image: mailhog/mailhog

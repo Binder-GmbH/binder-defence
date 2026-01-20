@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af5c4b1ba35d57e42767885b76351de6",
+    "content-hash": "41fa8f3d08b9054919b79d12705bd790",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1646,6 +1646,80 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
             },
             "time": "2025-12-06T11:56:16+00:00"
+        },
+        {
+            "name": "nitsan/ns-t3ai",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nitsan-technologies/ns_t3ai.git",
+                "reference": "6f34a24129cecf971480c33fd0c59cb85b3442e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nitsan-technologies/ns_t3ai/zipball/6f34a24129cecf971480c33fd0c59cb85b3442e6",
+                "reference": "6f34a24129cecf971480c33fd0c59cb85b3442e6",
+                "shasum": ""
+            },
+            "require": {
+                "typo3/cms-core": "^10 || ^11 || ^12 || ^13"
+            },
+            "replace": {
+                "typo3-ter/ns-t3ai": "self.version"
+            },
+            "type": "typo3-cms-extension",
+            "extra": {
+                "typo3/cms": {
+                    "web-dir": ".Build/public",
+                    "extension-key": "ns_t3ai"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NITSAN\\NsT3Ai\\": "Classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "T3: Nilesh Malankiya, T3: Parth Parmar, T3: Jay Bhalgamiya, T3: Rohan Parmar, QA: Vishal Solanki",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Meet T3AI- Experience AI-powered Models with ChatGPT, Gemini, Cloude & Azure AI for content generation, advanced SEO optimization, creative media production, easy language translation, and more—all within a few clicks, directly from your TYPO3 backend. Maximize your productivity by saving up to four times your time with T3AI.",
+            "homepage": "https://t3planet.com/t3ai-typo3-extension",
+            "keywords": [
+                "AIAssistant",
+                "AITranslations",
+                "AIchatbot",
+                "AIcontent",
+                "AIgeneration",
+                "AIimages",
+                "AImedia",
+                "AIpages",
+                "AIprompts",
+                "AIsidebar",
+                "AIsuggestion",
+                "ChatGpt",
+                "Gemini",
+                "KI",
+                "T3AI",
+                "TYPO3AI",
+                "TYPO3KI",
+                "ai",
+                "cloude",
+                "openai",
+                "seo",
+                "typo3"
+            ],
+            "support": {
+                "issues": "https://t3planet.com/support",
+                "source": "https://github.com/nitsan-technologies/ns_t3ai/tree/2.0.3"
+            },
+            "time": "2025-07-01T11:24:56+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -7361,6 +7435,79 @@
                 "source": "https://github.com/webmozarts/assert/tree/2.1.2"
             },
             "time": "2026-01-13T14:02:24+00:00"
+        },
+        {
+            "name": "xima/xima-typo3-content-planner",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xima-media/xima-typo3-content-planner.git",
+                "reference": "d43f2f40e89bd09c07c8d2ee9f041760d0654db6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xima-media/xima-typo3-content-planner/zipball/d43f2f40e89bd09c07c8d2ee9f041760d0654db6",
+                "reference": "d43f2f40e89bd09c07c8d2ee9f041760d0654db6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-filter": "*",
+                "ext-libxml": "*",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+                "psr/http-message": "^1.0 || ^2.0",
+                "psr/http-server-handler": "^1.0.2",
+                "psr/http-server-middleware": "^1.0.2",
+                "symfony/console": "^7.0 || ^8.0",
+                "typo3/cms-backend": "^13.4 || ^14.0",
+                "typo3/cms-beuser": "^13.4 || ^14.0",
+                "typo3/cms-core": "^13.4 || ^14.0",
+                "typo3/cms-dashboard": "^13.4 || ^14.0",
+                "typo3/cms-extbase": "^13.4 || ^14.0",
+                "typo3/cms-fluid": "^13.4 || ^14.0",
+                "typo3fluid/fluid": "^4.2 || ^5.0"
+            },
+            "require-dev": {
+                "eliashaeussler/version-bumper": "^2.4 || ^3.0",
+                "helhum/typo3-console": "^8.3.1",
+                "phpunit/phpunit": "^10.2 || ^11.0 || ^12.0",
+                "typo3/cms-base-distribution": "^13.4 || ^14.0",
+                "typo3/cms-lowlevel": "^13.4 || ^14.0"
+            },
+            "type": "typo3-cms-extension",
+            "extra": {
+                "typo3/cms": {
+                    "web-dir": "public",
+                    "extension-key": "xima_typo3_content_planner",
+                    "cms-package-dir": "{$vendor-dir}/typo3/cms"
+                },
+                "konradmichalik/php-cs-fixer-preset": {
+                    "copyright": 2024
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Xima\\XimaTypo3ContentPlanner\\": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Konrad Michalik",
+                    "email": "hej@konradmichalik.dev",
+                    "homepage": "https://konradmichalik.dev",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "This extension provides a page status functionality to support the planning of content work.",
+            "support": {
+                "issues": "https://github.com/xima-media/xima-typo3-content-planner/issues",
+                "source": "https://github.com/xima-media/xima-typo3-content-planner/tree/2.0.1"
+            },
+            "time": "2025-12-22T12:19:22+00:00"
         }
     ],
     "packages-dev": [
