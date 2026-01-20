@@ -69,7 +69,11 @@ composer-require:
 		exit 1; \
 	fi
 	@echo "📦 Installing $(EXT)..."
+	@echo "🔧 Fixing composer.json permissions for write access..."
+	docker exec binder-defence-app-1 chmod 666 /app/source/composer.json
 	docker exec -w /app/source binder-defence-app-1 composer require $(EXT)
+	@echo "🔧 Restoring composer.json permissions..."
+	docker exec binder-defence-app-1 chmod 644 /app/source/composer.json
 	@echo "🔧 Setting up database tables..."
 	docker exec binder-defence-app-1 php vendor/bin/typo3 extension:setup
 	@echo "🔧 Fixing permissions..."
